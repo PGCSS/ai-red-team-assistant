@@ -1,0 +1,203 @@
+PS C:\REDMIND\ai-red-team-assistant> python cli.py
+=== AI Red Team Assistant (CLI MVP) ===
+Describe your target and objective (or 'q' to quit):
+
+Target & objective> Target: external web application (staging). Objective: assess authentication, session management, and access control mechanisms to identify potential privilage escalation paths. Testing is authorised and limited to the staging environment
+
+--- Parsed JSON plan ---
+{
+  "objective": "Assess authentication, session management, and access control mechanisms to identify potential privilege escalation paths.",
+  "scope": "External web application staging environment only; testing performed with explicit written authorization. Out of scope: production systems and backend source code without permission.",
+  "high_level_attack_vectors": [
+    "Weak password policies enabling brute force or credential stuffing",
+    "Session fixation and insecure cookie attributes",
+    "Inadequate access controls allowing unauthorized privilege escalation",
+    "Client-side XSS leading to token theft"
+  ],
+  "conceptual_test_steps": [
+    "In a controlled lab environment or with explicit written authorization, review authentication endpoints and session cookie attributes (Secure, HttpOnly, SameSite).",
+    "With authorization, evaluate access control mechanisms by attempting to access restricted resources with lower-privileged accounts.",
+    "In a lab, analyze session management practices, including token expiration and revocation processes."
+  ],
+  "detection_points": [
+    "Monitor for repeated failed login attempts and spikes in authentication failures.",
+    "Log access attempts to restricted resources and alert on unauthorized access patterns.",
+    "Detect anomalies in session token usage, such as token reuse across different IPs."
+  ],
+  "recommended_remediations": [
+    "Enforce strong password policies and implement account lockout mechanisms.",
+    "Set session cookies with Secure, HttpOnly, and appropriate SameSite attributes; implement short token lifetimes.",
+    "Regularly review and tighten access control policies to ensure least privilege."
+  ],
+  "mitre_tags": [
+    "T1110",
+    "T1078"
+  ],
+  "references": [
+    "OWASP Authentication Cheat Sheet",
+    "OWASP Access Control Cheat Sheet"
+  ],
+  "assumptions": "Testing is authorized by the application owner; steps referencing active testing are only for lab or authorized engagement."
+}
+
+Target & objective> Target: corporate internal lan (isolated lab). Objective: simulate lateral movement scenarios, validate segmentation controls, and check for credential reuse issues. All accounts are test accounts and testing is authorised
+
+--- Parsed JSON plan ---
+{
+  "objective": "Simulate lateral movement scenarios to validate segmentation controls and check for credential reuse issues in an isolated lab environment.",
+  "scope": "Isolated lab environment only; all testing performed with explicit written authorization using test accounts.",
+  "high_level_attack_vectors": [
+    "Credential reuse across test accounts",
+    "Misconfigured network segmentation allowing unauthorized access",
+    "Exploitation of weak internal passwords"
+  ],
+  "conceptual_test_steps": [
+    "In a controlled lab environment, map the network topology and identify potential pivot points for lateral movement.",
+    "Simulate credential reuse scenarios using test accounts to assess detection capabilities and response.",
+    "Test the effectiveness of segmentation controls by attempting to access restricted segments from compromised test accounts."
+  ],
+  "detection_points": [
+    "Monitor for unusual authentication patterns, such as multiple logins from different hosts using the same credentials.",
+    "Alert on unexpected access attempts to sensitive resources from non-privileged accounts.",
+    "Detect lateral movement through unusual inter-host traffic patterns."
+  ],
+  "recommended_remediations": [
+    "Enforce strong password policies and unique credentials for all test accounts.",
+    "Implement strict network segmentation and access controls to limit lateral movement.",
+    "Regularly review and audit account permissions and access logs."
+  ],
+  "mitre_tags": [
+    "T1021"
+  ],
+  "references": [
+    "MITRE ATT&CK",
+    "Vendor network segmentation guidance"
+  ],
+  "assumptions": "All testing is conducted in an isolated lab environment with authorized test accounts."
+}
+
+Target & objective> Target: AWS environment (authorized read-only audit). Objective: identify misconfigurations in IAM policies, S3 buckets, and serverless roles that could lead to data exposure or privilege escalation.
+
+--- Parsed JSON plan ---
+{
+  "objective": "Identify potential misconfigurations in IAM policies, S3 buckets, and serverless roles that could lead to data exposure or privilege escalation.",
+  "scope": "Authorized read-only audit of the specified AWS environment; active testing is not permitted without explicit written authorization.",
+  "high_level_attack_vectors": [
+    "Overly permissive IAM roles and policies",
+    "Publicly accessible S3 buckets or misconfigured object ACLs",
+    "Excessive permissions on serverless functions"
+  ],
+  "conceptual_test_steps": [
+    "Conduct a read-only inventory of IAM roles and attached policies using AWS Management Console or CLI.",
+    "Enumerate S3 buckets and review their ACLs and bucket policies for public access configurations.",
+    "Review serverless function roles for overly broad permissions and assess trust relationships."
+  ],
+  "detection_points": [
+    "CloudTrail logs for unusual IAM policy changes or S3 access patterns.",
+    "Alerts on new or modified IAM roles with elevated permissions.",
+    "Monitoring for public access configurations on S3 buckets."
+  ],
+  "recommended_remediations": [
+    "Apply least privilege principles to IAM policies and remove unnecessary permissions.",
+    "Block public access to S3 buckets and enable logging for access requests.",
+    "Harden serverless roles by limiting permissions to only what is necessary for function execution."
+  ],
+  "mitre_tags": [
+    "T1530"
+  ],
+  "references": [
+    "AWS Well-Architected Framework",
+    "CIS AWS Foundations"
+  ],
+  "assumptions": "Only read-only audit is permitted; no active testing is authorized."
+}
+
+Target & objective> Target: public API (beta environment with authorization). Objective: assess authentication, rate limiting, and access control handling for potential abuse or data leakage.
+
+--- Parsed JSON plan ---
+{
+  "objective": "Assess authentication, rate limiting, and access control mechanisms to identify potential abuse or data leakage vulnerabilities.",
+  "scope": "Beta environment of the public API only; testing performed with explicit written authorization. Out of scope: production systems and unauthorized access attempts.",
+  "high_level_attack_vectors": [
+    "Weak authentication mechanisms allowing credential stuffing or brute force attacks",
+    "Inadequate rate limiting leading to abuse or denial of service",
+    "Improper access controls exposing sensitive data or functionality"
+  ],
+  "conceptual_test_steps": [
+    "In a controlled lab environment or with explicit written authorization, review authentication endpoints for weaknesses such as lack of MFA.",
+    "With authorization, test rate limiting by simulating high-frequency requests to identify thresholds and potential bypass methods.",
+    "In a lab, evaluate access control policies by attempting to access restricted endpoints with different user roles."
+  ],
+  "detection_points": [
+    "Monitor for unusual patterns of failed authentication attempts and spikes in request rates.",
+    "Log and alert on access to sensitive endpoints from unauthorized user roles.",
+    "Track and analyze rate-limiting thresholds being exceeded and the source IPs of such requests."
+  ],
+  "recommended_remediations": [
+    "Implement strong authentication practices, including MFA and account lockout mechanisms.",
+    "Enforce strict rate limiting and throttling policies to mitigate abuse.",
+    "Regularly review and audit access control policies to ensure proper restrictions are in place."
+  ],
+  "mitre_tags": [
+    "T1110",
+    "T1071"
+  ],
+  "references": [
+    "OWASP API Security Top 10",
+    "OWASP Authentication Cheat Sheet"
+  ],
+  "assumptions": "Testing is authorized by the API owner; steps referencing active testing are only for lab or authorized engagement."
+}
+
+Target & objective> Objective: describe how defenders can detect attempts to bypass MFA on an enterprise login portal. Conceptual and defensive guidance only.
+
+--- Parsed JSON plan ---
+{
+  "objective": "Describe detection signals and mitigations defenders can use to identify attempts to bypass MFA on an enterprise login portal.",
+  "scope": "Defensive detection and mitigation guidance; no offensive steps.",
+  "high_level_attack_vectors": [],
+  "conceptual_test_steps": [],
+  "detection_points": [
+    "Monitor for login attempts from unusual locations or IP addresses, especially after successful password entry.",
+    "Alert on multiple failed MFA challenges for the same user account in a short time frame.",
+    "Detect changes in user-agent strings or device fingerprints during the authentication process."
+  ],
+  "recommended_remediations": [
+    "Implement adaptive authentication that considers user behavior and context before allowing MFA bypass.",
+    "Enforce strict logging and monitoring of authentication events, especially around MFA challenges.",
+    "Educate users on recognizing phishing attempts that may target MFA credentials."
+  ],
+  "mitre_tags": [],
+  "references": [
+    "NIST Digital Identity Guidelines",
+    "OWASP Authentication Cheat Sheet"
+  ],
+  "assumptions": "Defensive, detection-centric response requested."
+}
+
+Target & objective> Explain the purpose of Burp Suite during authorized web application testing and outline conceptual use-cases in a lab environment.
+
+--- Parsed JSON plan ---
+{
+  "objective": "Explain the purpose of Burp Suite in authorized web application testing and outline conceptual use-cases in a lab environment.",
+  "scope": "Educational explanation of Burp Suite's functionalities and use-cases in a controlled lab environment; no offensive commands or exploit payloads provided.",
+  "high_level_attack_vectors": [],
+  "conceptual_test_steps": [
+    "In a controlled lab environment, use Burp Proxy to intercept and analyze HTTP(S) traffic between a web browser and the target application.",
+    "Employ Burp's scanner to identify vulnerabilities such as SQL injection or XSS in a test application.",
+    "Utilize the Intruder tool to automate the testing of input fields for common vulnerabilities, ensuring all tests are conducted ethically and with authorization."
+  ],
+  "detection_points": [],
+  "recommended_remediations": [
+    "Implement strong input validation and output encoding to mitigate identified vulnerabilities.",
+    "Monitor for unusual patterns of traffic that may indicate automated scanning or probing."
+  ],
+  "mitre_tags": [],
+  "references": [
+    "PortSwigger documentation",
+    "OWASP Testing Guide"
+  ],
+  "assumptions": "User requests educational information regarding Burp Suite's use in authorized testing scenarios."
+}
+
+Target & objective>
