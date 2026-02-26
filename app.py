@@ -5,6 +5,8 @@ import time
 import re
 from pathlib import Path
 
+KEYS_FILE = Path("keys.json")
+
 import streamlit as st
 from backend import generate_plan, generate_report
 
