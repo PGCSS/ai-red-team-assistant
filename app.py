@@ -171,6 +171,22 @@ with st.sidebar:
     else:
         st.caption("No previous sessions saved yet.")
 
+st.markdown("## 🔓 Unlock Report Generator (Lifetime)")
+st.markdown("""
+**One-time purchase. Forever access.**  
+Generate student-ready cybersecurity lab reports from messy notes:
+- Rubric checklist included
+- Findings + severity + impact
+- Remediation + prioritized actions
+- MITRE tags (optional)
+""")
+
+stripe_link = "https://buy.stripe.com/test_6oU7sE7Du4xEcrebGAbwk00"
+st.link_button("Buy lifetime access ($0.99)", stripe_link)
+
+st.caption("After purchase, you'll receive an access key by email (manual delivery for beta).")
+st.markdown("---")
+
 st.markdown("### Access")
 
 user_key = st.text_input(
